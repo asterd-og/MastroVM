@@ -1,6 +1,9 @@
 # MastroVM
 MastroVM is a Virtual Machine (and fantasy CPU) that is made to be simple and easy to use.
 
+![Image](https://github.com/asterd-og/MastroVM/blob/master/image.png?raw=true)
+
+
 # Specifications
 - 128 KB of memory
 - 3 Registers (a, b and c)
