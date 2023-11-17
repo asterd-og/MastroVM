@@ -1,6 +1,31 @@
 #include "cpu.h"
-#include <stdlib.h>
-#include <stdio.h>
+
+enum {
+    STARTING,
+    OK,
+    ERROR,
+    HALT,
+    ADDR_OUT_OF_BOUNDS,
+    STACK_OUT_OF_BOUNDS,
+    UNKNOWN_REGISTER,
+    INVALID_JMP_ADDR,
+    DIVIDE_BY_ZERO
+} CPU_Status;
+
+enum {
+    ADDR_VAL,
+    ADDR_REG,
+    REG_ADDR,
+    REG_VAL,
+    REG_REG
+} CMP_Types;
+
+enum {
+    ADD,
+    SUB,
+    MUL,
+    DIV
+} CPU_Operation;
 
 int CPU_Init(CPU* cpu, uint16_t* rom) {
     if (cpu == NULL) {
@@ -36,7 +61,7 @@ int CPU_Init(CPU* cpu, uint16_t* rom) {
 uint16_t CPU_Fetch(CPU* cpu, uint8_t* cycles) {
     uint16_t data = cpu->memory[cpu->PC];
     cpu->PC++;
-    cycles--;
+    (*cycles)--;
     return data;
 }
 

@@ -1,5 +1,4 @@
 #include "tvo.h"
-#include <stdbool.h>
 
 static inline bool bit_address_from_byte(uint32_t to_convert, int to_return)
 {

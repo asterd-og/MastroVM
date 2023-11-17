@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <pthread.h>
 
 // Mastro is a 16-Bit CPU
@@ -47,33 +48,6 @@
 
 #define romStart   0x817f
 #define romEnd     0xffff 
-
-enum {
-    STARTING,
-    OK,
-    ERROR,
-    HALT,
-    ADDR_OUT_OF_BOUNDS,
-    STACK_OUT_OF_BOUNDS,
-    UNKNOWN_REGISTER,
-    INVALID_JMP_ADDR,
-    DIVIDE_BY_ZERO
-} CPU_Status;
-
-enum {
-    ADDR_VAL,
-    ADDR_REG,
-    REG_ADDR,
-    REG_VAL,
-    REG_REG
-} CMP_Types;
-
-enum {
-    ADD,
-    SUB,
-    MUL,
-    DIV
-} CPU_Operation;
 
 typedef struct {
     uint16_t memory[65536];
