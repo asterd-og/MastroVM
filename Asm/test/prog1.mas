@@ -1,0 +1,24 @@
+mov regA 0x707f
+mov regB 0
+mov regC 0
+
+a:
+in regB 1
+cmp regB 0
+jne b
+cmp regB 0
+je c
+jmp a
+
+b:
+cmp regC 1
+je a
+mov [regA] regB
+add regA 1
+mov regB 0
+mov regC 1
+jmp a
+
+c:
+mov regC 0
+jmp a
