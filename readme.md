@@ -67,4 +67,4 @@ port[1] = Key that is being pressed
 ```
 
 # Known bugs
-- port[1] (in this case the key of keyboard) doesn't support some keys, such as space. This happens because of the way that SDL handle keys, I still have to find a solution for that.
+- Going to put known bugs here.
