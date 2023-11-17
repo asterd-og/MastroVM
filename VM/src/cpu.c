@@ -61,7 +61,7 @@ int CPU_Init(CPU* cpu, uint16_t* rom) {
 uint16_t CPU_Fetch(CPU* cpu, uint8_t* cycles) {
     uint16_t data = cpu->memory[cpu->PC];
     cpu->PC++;
-    *cycles--;
+    (*cycles)--;
     return data;
 }
 
