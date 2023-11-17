@@ -34,7 +34,7 @@
 //   - Free Memory: from 0x0000 until 0x807f (32 kb)
 //   - Stack: from 0x807f until 0x817f (256 entries of 16 bits data)
 //   - ROM: from 0x817f until 0xffff (32 kb)
-//   - For the future, TVO: 0x707f until 0x807f (80 * 25 chars)
+//   - TVO: 0x707f until 0x807f (80 * 25 chars)
 
 #define freeStart  0x0000
 #define freeEnd    0x807f
