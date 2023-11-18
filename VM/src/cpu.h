@@ -33,21 +33,25 @@
 //      register in the register bus.
 //
 //  And finally, the memory layout:
-//   - Free Memory: from 0x0000 until 0x807f (32 kb)
-//   - Stack: from 0x807f until 0x817f (256 entries of 16 bits data)
+//   - Free Memory: from 0x0000 until 0x41ff (16 kb)
+//   - TVO: 0x3a2f until 0x41ff (80 * 25 chars)
+//   - Stack: from 0x41ff until 0x42ff (256 entries of 16 bits data)
+//   - Rodata: from 0x42ff until 0x817f (16KB of rodata)
 //   - ROM: from 0x817f until 0xffff (32 kb)
-//   - TVO: 0x707f until 0x807f (80 * 25 chars)
 
 #define freeStart  0x0000
-#define freeEnd    0x807f
+#define freeEnd    0x41ff
 
-#define TVOStart   0x707f
-#define TVOEnd     0x807f
+#define TVOStart   freeEnd - (80 * 25)
+#define TVOEnd     freeEnd
 
-#define stackStart 0x807f
-#define stackEnd   0x817f
+#define stackStart TVOEnd
+#define stackEnd   TVOEnd + 0x0100
 
-#define romStart   0x817f
+#define rdataStart stackEnd
+#define rdataEnd   stackEnd + 0x3e80
+
+#define romStart   rdataEnd
 #define romEnd     0xffff 
 
 typedef struct {
@@ -55,9 +59,6 @@ typedef struct {
     uint16_t SP;
     uint16_t PC;
     
-    //uint16_t regA;
-    //uint16_t regB;
-    //uint16_t regC;
     uint16_t registers[16];
 
     uint8_t status;

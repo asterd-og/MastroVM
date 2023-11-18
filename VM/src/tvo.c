@@ -33,7 +33,7 @@ void TVO_Render(SDL_Renderer* renderer, CPU* cpu) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     for (int y = 0; y < 25; y++) {
         for (int x = 0; x < 80; x++) {
-            TVO_WriteChar(cpu->memory[0x707f + (x + (y * 80))], x * 8, y * 16, 0x0, renderer);
+            TVO_WriteChar(cpu->memory[TVOStart + (x + (y * 80))], x * 8, y * 16, 0x0, renderer);
         }
     }
     TVO_DrawRect(cpu->ports[2] * 8, (cpu->ports[3] * 16) - 3, 8, 3, renderer);

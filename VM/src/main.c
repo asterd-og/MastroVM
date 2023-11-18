@@ -21,6 +21,11 @@ void* SDL_Update() {
     while (running) {
         if (CPU_Execute(&cpu, 3)) {
             printf("CPU Error %d!\n", cpu.status);
+            SDL_DestroyWindow(window);
+            SDL_DestroyRenderer(renderer);
+            SDL_Quit();
+            running = false;
+            exit(1);
         }
         TVO_Render(renderer, &cpu);
         SDL_RenderPresent(renderer);
@@ -89,7 +94,7 @@ int main(int argc, char** argv) {
     }
 
     FILE *fptr;
-    uint16_t rom[0x7e80] = {};
+    uint16_t rom[0xbd00] = {};
     if ((fptr = fopen(argv[1], "rb")) == NULL){
        printf("Error opening rom.\n");
        return 1;

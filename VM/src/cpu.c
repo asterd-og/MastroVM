@@ -33,12 +33,12 @@ int CPU_Init(CPU* cpu, uint16_t* rom) {
         return 1;
     }
 
-    for (uint16_t i = 0x0; i < 0x7e80; i++) {
-        cpu->memory[i + 0x817f] = rom[i];
+    for (uint16_t i = 0x0; i < 0xbd00; i++) {
+        cpu->memory[i + rdataStart] = rom[i];
     }
     
     cpu->SP = 0;
-    cpu->PC = 0x817f;
+    cpu->PC = romStart;
 
     for (uint16_t i = 0; i < 15; i++) {
         cpu->registers[i] = 0;
@@ -73,7 +73,7 @@ void CPU_WriteMem(CPU* cpu) {
         CPU_ReadReg(cpu);
         cpu->addressBus = cpu->dataBus;
 
-        if (cpu->addressBus > 0x817f) {
+        if (cpu->addressBus > romStart) {
             cpu->status = ADDR_OUT_OF_BOUNDS;
             return;
         }
@@ -85,7 +85,7 @@ void CPU_WriteMem(CPU* cpu) {
 
         return;
     }
-    if (cpu->addressBus > 0x817f) {
+    if (cpu->addressBus > romStart) {
         cpu->status = ADDR_OUT_OF_BOUNDS;
         return;
     }
@@ -100,7 +100,7 @@ void CPU_ReadMem(CPU* cpu) {
         CPU_ReadReg(cpu);
         cpu->addressBus = cpu->dataBus;
 
-        if (cpu->addressBus > 0x817f) {
+        if (cpu->addressBus > romStart) {
             cpu->status = ADDR_OUT_OF_BOUNDS;
             return;
         }
@@ -112,7 +112,7 @@ void CPU_ReadMem(CPU* cpu) {
 
         return;
     }
-    if (cpu->addressBus > 0x817f) {
+    if (cpu->addressBus > romStart) {
         cpu->status = ADDR_OUT_OF_BOUNDS;
     }
     cpu->dataBus = cpu->memory[cpu->addressBus];
@@ -903,6 +903,31 @@ int CPU_Execute(CPU* cpu, uint8_t cycles) {
                     return 1;
                 }
                 break;
+            
+            // ================================================
+            // =========== CALL AND RET INSTRUCTION ===========
+            // ================================================
+
+            case 0x0031:
+                // CALL [ADDR]
+                cycles--;
+                cpu->addressBus = CPU_Fetch(cpu, &cycles);
+                cpu->dataBus = cpu->PC;
+                CPU_Push(cpu);
+                CPU_Jmp(cpu);
+                break;
+            case 0x0032:
+                // RET
+                cycles -= 2;
+                cpu->registerBus = 15;
+                CPU_Pop(cpu);
+                CPU_ReadReg(cpu);
+                cpu->addressBus = cpu->dataBus;
+                CPU_Jmp(cpu);
+                break;
+
+
+
         }
     }
     return 0;

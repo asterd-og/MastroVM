@@ -60,15 +60,31 @@ outRegVal  = 0x002e
 outValReg  = 0x002f
 outRegReg  = 0x0030
 
+callAddr   = 0x0031
+ret        = 0x0032
+
 program = []
 ln = 1
 mode = 0
 labels = {}
 labelsNeedChange = {}
+
 dataAddrs = {}
+lastDataAddr = 0x42ff
+dataNeedChange = {}
+
+def getDataAddr(name):
+    if not name in dataAddrs:
+        print(f"{name} Not found.")
+        exit(1)
+    return dataAddrs[name]
 
 def createData(data, name):
-    dataAddrs[name] = data
+    global lastDataAddr
+    dataAddrs[name.lower()] = lastDataAddr
+    for i in range(len(data)):
+        program[lastDataAddr - 0x42ff] = data[i]
+        lastDataAddr += 1
 
 def isReg(str_):
     if not str_.startswith('['):
@@ -115,6 +131,12 @@ def parseAddr(addr):
             print(f"Invalid combination of operands at line {ln}.")
             exit(1)
         return 3
+    else:
+        if addr[0].isalpha():
+            if not addr in dataAddrs:
+                print(f"{addr} Not found.")
+                exit(1)
+            return dataAddrs[addr]
     return parseNum(addr)
 
 def parseMov(line):
@@ -140,6 +162,9 @@ def parseMov(line):
             if line[2].startswith('['):
                 mode = movRegAddr
                 val = parseAddr(line[2])
+            elif line[2][0].isalpha():
+                mode = movRegVal
+                val = getDataAddr(line[2].lower())
             else: val = parseNum(line[2])
     
     program.append(mode)
@@ -448,8 +473,40 @@ def parseOut(line):
             mode = outValVal
             right = parseNum(line[2])
 
+def parseCall(line):
+    addr = 0
+    if not line[1].startswith('['):
+        if line[1] not in labels:
+            addr = 0x0000
+            labelsNeedChange[len(program) + 1] = line[1]
+        else:
+            addr = labels[line[1]]
+    else:
+        addr = parseAddr(line[1])
+    program.append(callAddr)
+    program.append(addr)
+
+def parseRet(line):
+    program.append(ret)
+
 def parseLabel(line):
-    labels[line[0].replace(':', '')] = len(program) + 0x817f
+    labels[line[0].replace(':', '')] = len(program) + 0x42ff
+
+def parseWd(line):
+    if line[2].startswith('"'):
+        stringLine = ' '.join(line)
+        startIdx = stringLine.find('"')
+        endIdx = stringLine.rfind('"')
+        string = stringLine[startIdx + 1 : endIdx]
+        slist = []
+        for i in range(len(string)):
+            slist.append(ord(string[i]))
+        createData(slist, line[0])
+        return
+    # for i in range(len(line) - 2):
+
+for i in range(0x3e80):
+    program.append(0x0)
 
 with open(sys.argv[1], 'r') as f:
     for line in f.readlines():
@@ -494,6 +551,10 @@ with open(sys.argv[1], 'r') as f:
             parseIn(line)
         elif line[0] == 'out':
             parseOut(line)
+        elif line[0] == 'call':
+            parseCall(line)
+        elif line[0] == 'ret':
+            parseRet(line)
         elif ':' in line[0]:
             parseLabel(line)
         elif ';' in line[0]:
@@ -501,7 +562,15 @@ with open(sys.argv[1], 'r') as f:
         elif line[0] == '':
             continue
         else:
-            print(f"tf is {line[0]}")
+            if len(line) > 0:
+                if line[1] == 'wd':
+                    parseWd(line)
+                else:
+                    print(f"tf is {line[0]}")
+                    exit(1)
+            else:
+                print(f"tf is {line[0]}")
+                exit(1)
         ln += 1
                 
 program.append(0xffff)
