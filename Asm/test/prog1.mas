@@ -1,31 +1,30 @@
-mov regA 0x707f
-mov regB 0
-mov regC 0
+MOV regA 0x707f ; TVO Address Base
+MOV regB 0      ; Char of key being pressed
+MOV regC 0      ; This stops key from being too sensitive
 
-mov regD 0
-mov regE 0
-
-out regE 3
+MOV regD 0      ; Cursor X
+MOV regE 0      ; Cursor Y
 
 a:
-in regB 1
-cmp regB 0
-jne b
-cmp regB 0
-je c
-jmp a
+    IN regB 1   ; Store key being pressed in regB
+    CMP regB 0  ; Compare if it's equals to 0
+    JNE b       ; If it's not 0, then try to print it
+    CMP regB 0  ; Compare again
+    JE c        ; If it is zero, that means no key being pressed
+    ; It will jump to C
+    JMP a       ; Otherwise just loop
 
 b:
-cmp regC 1
-je a
-mov [regA] regB
-add regA 1
-mov regB 0
-mov regC 1
-add regD 1
-out 2 regD
-jmp a
+    CMP regC 1  ; Compare if the key has been shown already, if yes
+    JE a        ; Then jump to A
+    MOV [regA] regB ; Move the char to the TVO address
+    ADD regA 1      ; Increment the TVO address
+    MOV regB 0      ; Set char to 0
+    MOV regC 1      ; Set pressed to 1
+    ADD regD 1      ; Add cursor X
+    OUT 2 regD      ; Send cursor X
+    JMP a           ; Loop again
 
 c:
-mov regC 0
-jmp a
+    MOV regC 0      ; If no key is being pressed, set pressed to 0
+    JMP a           ; Loop again

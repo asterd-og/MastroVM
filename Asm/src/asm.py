@@ -453,8 +453,10 @@ def parseLabel(line):
 
 with open(sys.argv[1], 'r') as f:
     for line in f.readlines():
-        line = line.replace('\n', '').lower().split(' ')
-        if line[0] == 'hlt':
+        line = list(filter(None, line.replace('\n', '').replace('\t', '').lower().split(' ')))
+        if len(line) == 0:
+            continue
+        elif line[0] == 'hlt':
             program.append(0xffff)
         elif line[0] == 'nop':
             program.append(0x0000)
