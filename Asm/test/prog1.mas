@@ -1,21 +1,21 @@
-ads wd "Hello World!"
+ads wd "Hello World!"   ; Write Data (rodata) string Hello World!
 
-mov regB ads
-mov regD 0x3a2f
+mov regB ads            ; Mov the address of ads to regB
+mov regD 0x3a2f         ; Mov the address of TVO start to regD
 
-call print
+call print              ; Call subroutine print
 
-.:
-    jmp .
+.:                      ; Inf loop
+    jmp .               ; .
 
 print:
-    mov regC [regB]
-    cmp regC 0
-    je end
-    mov [regD] regC
-    add regD 1
-    add regB 1
-    jmp print
+    mov regC [regB]     ; Mov char from address regB to regC
+    cmp regC 0          ; Compare if regC is 0
+    je end              ; If it is, return
+    mov [regD] regC     ; Else, mov that char to the TVO address
+    add regD 1          ; Increment TVO address
+    add regB 1          ; Increment string pointer address
+    jmp print           ; Loop
 
 end:
-    ret
+    ret                 ; Return from the subroutine
