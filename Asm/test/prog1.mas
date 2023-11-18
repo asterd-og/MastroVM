@@ -2,6 +2,11 @@ mov regA 0x707f
 mov regB 0
 mov regC 0
 
+mov regD 0
+mov regE 0
+
+out regE 3
+
 a:
 in regB 1
 cmp regB 0
@@ -17,6 +22,8 @@ mov [regA] regB
 add regA 1
 mov regB 0
 mov regC 1
+add regD 1
+out 2 regD
 jmp a
 
 c:

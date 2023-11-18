@@ -27,8 +27,8 @@ void TVO_DrawRect(int x, int y, int w, int h, SDL_Renderer* renderer) {
 }
 
 void TVO_Render(SDL_Renderer* renderer, CPU* cpu) {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    TVO_DrawRect(cpu->ports[2] * 8, (cpu->ports[3] * 16) - 3, 8, 3, renderer);
+    //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    //TVO_DrawRect(cpu->ports[2] * 8, (cpu->ports[3] * 16) - 3, 8, 3, renderer);
     //SDL_SetRenderDrawColor(renderer, (argb & 0xFF), ((argb >> 8) & 0xFF), ((argb >> 16) & 0xFF), 255);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     for (int y = 0; y < 25; y++) {

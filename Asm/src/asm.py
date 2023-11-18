@@ -453,7 +453,7 @@ def parseLabel(line):
 
 with open(sys.argv[1], 'r') as f:
     for line in f.readlines():
-        line = line.replace('\n', '').split(' ')
+        line = line.replace('\n', '').lower().split(' ')
         if line[0] == 'hlt':
             program.append(0xffff)
         elif line[0] == 'nop':
@@ -492,10 +492,12 @@ with open(sys.argv[1], 'r') as f:
             parseIn(line)
         elif line[0] == 'out':
             parseOut(line)
-        elif line[0] == '':
-            continue
         elif ':' in line[0]:
             parseLabel(line)
+        elif ';' in line[0]:
+            continue
+        elif line[0] == '':
+            continue
         else:
             print(f"tf is {line[0]}")
         ln += 1
