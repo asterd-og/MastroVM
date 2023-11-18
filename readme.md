@@ -6,14 +6,14 @@ MastroVM is a Virtual Machine (and fantasy CPU) that is made to be simple and ea
 
 # Specifications
 - 128 KB of memory
-- 3 Registers (a, b and c)
+- 16 Registers (a, b, c and so on)
 - I/O Ports (keyboard only for now)
 - TVO (Text Video Output)
 - 256 Entries for stack
-- 17 Instructions
+- 19 Instructions
 
 # Instructions
-Mastro has 17 instructions, here's all of them:
+Mastro has 19 instructions, here's all of them:
 - mov  [ADDR] VAL | [ADDR] REG | REG [ADDR] | REG VAL | REG REG
 - push [ADDR] | VAL | REG
 - pop  REG
@@ -31,6 +31,8 @@ Mastro has 17 instructions, here's all of them:
 - div  [ADDR] VAL | [ADDR] REG | REG [ADDR] | REG VAL | REG REG
 - in   REG VAL | REG REG
 - out  VAL VAL | REG VAL | VAL REG| REG REG
+- call [ADDR]
+- ret
 
 # Why no moving address into address?
 As you can see in the mov instruction, we can't mov an address directly into another, that's because you have to use an intermediate register to do that, for example:
@@ -51,6 +53,35 @@ dec sp 4
 mov [sp] 0x0042
 add sp 4
 ```
+
+# Call and subroutines
+Whenever you call a subroutine in MastroVM, it will do the following things:
+- Push current address to the stack
+- Jmp to the address
+So remember to ALWAYS return a subroutine, or else, it will never... return!
+```x86asm
+call printChar
+mov regA 0x42
+
+.:
+ jmp .
+
+printChar:
+ mov [0x3a2f] 0x64
+ ret
+```
+
+# Rodata
+Let's say you want to define a string to use it later, in Mastro, you would do it in the following way:
+```x86asm
+str wd "Hello World!"
+
+mov regB str            ; Moves the address of str into regB
+mov regC [regB]         ; Moves the first letter of str into regC
+mov [0x3a2f] regC       ; Moves the contents of regC to TVO address
+; This will print 'H' to the screen
+```
+Remember to ALWAYS define the string BEFORE you use it!
 
 # Memory and ports layout
 The memory in MastroVM works like this:

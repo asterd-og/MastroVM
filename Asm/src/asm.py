@@ -510,7 +510,8 @@ for i in range(0x3e80):
 
 with open(sys.argv[1], 'r') as f:
     for line in f.readlines():
-        line = list(filter(None, line.replace('\n', '').replace('\t', '').lower().split(' ')))
+        line = list(filter(None, line.replace('\n', '').replace('\t', '').split(' ')))
+        if (len(line) > 0): line[0] = line[0].lower()
         if len(line) == 0:
             continue
         elif line[0] == 'hlt':
