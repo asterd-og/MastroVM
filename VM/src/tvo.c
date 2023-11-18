@@ -18,14 +18,23 @@ void TVO_WriteChar(char c, int x, int y, uint32_t argb, SDL_Renderer* renderer) 
     }
 }
 
+void TVO_DrawRect(int x, int y, int w, int h, SDL_Renderer* renderer) {
+    for (size_t cy = y; cy < y + h; y++) {
+        for (size_t cx = x; cx < x + w; x++) {
+            SDL_RenderDrawPoint(renderer, cx, cy);
+        }
+    }
+}
+
 void TVO_Render(SDL_Renderer* renderer, CPU* cpu) {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    TVO_DrawRect(cpu->ports[2] * 8, (cpu->ports[3] * 16) - 3, 8, 3, renderer);
     //SDL_SetRenderDrawColor(renderer, (argb & 0xFF), ((argb >> 8) & 0xFF), ((argb >> 16) & 0xFF), 255);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    //printf("going to render\n");
     for (int y = 0; y < 25; y++) {
         for (int x = 0; x < 80; x++) {
-            //printf("%c",cpu->memory[0x707f+(x+(y*80))]);
             TVO_WriteChar(cpu->memory[0x707f + (x + (y * 80))], x * 8, y * 16, 0x0, renderer);
         }
     }
+    TVO_DrawRect(cpu->ports[2] * 8, (cpu->ports[3] * 16) - 3, 8, 3, renderer);
 }

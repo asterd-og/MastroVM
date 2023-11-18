@@ -40,9 +40,9 @@ int CPU_Init(CPU* cpu, uint16_t* rom) {
     cpu->SP = 0;
     cpu->PC = 0x817f;
 
-    cpu->regA = 0;
-    cpu->regB = 0;
-    cpu->regC = 0;
+    for (uint16_t i = 0; i < 15; i++) {
+        cpu->registers[i] = 0;
+    }
 
     cpu->status = STARTING;
     cpu->zero = 0;
@@ -119,43 +119,19 @@ void CPU_ReadMem(CPU* cpu) {
 }
 
 void CPU_WriteReg(CPU* cpu) {
-    switch (cpu->registerBus) {
-        case 0x0:
-            cpu->regA = cpu->dataBus;
-            break;
-        case 0x1:
-            cpu->regB = cpu->dataBus;
-            break;
-        case 0x2:
-            cpu->regC = cpu->dataBus;
-            break;
-        case 0x3:
-            cpu->SP = cpu->dataBus;
-            break;
-        default:
-            cpu->status = UNKNOWN_REGISTER;
-            break;
+    if (cpu->registerBus > 15) {
+        cpu->status = UNKNOWN_REGISTER;
+        return;
     }
+    cpu->registers[cpu->registerBus] = cpu->dataBus;
 }
 
 void CPU_ReadReg(CPU* cpu) {
-    switch (cpu->registerBus) {
-        case 0x0:
-            cpu->dataBus = cpu->regA;
-            break;
-        case 0x1:
-            cpu->dataBus = cpu->regB;
-            break;
-        case 0x2:
-            cpu->dataBus = cpu->regC;
-            break;
-        case 0x3:
-            cpu->dataBus = cpu->SP;
-            break;
-        default:
-            cpu->status = UNKNOWN_REGISTER;
-            break;
+    if (cpu->registerBus > 15) {
+        cpu->status = UNKNOWN_REGISTER;
+        return;
     }
+    cpu->dataBus = cpu->registers[cpu->registerBus];
 }
 
 void CPU_WritePort(CPU* cpu) {

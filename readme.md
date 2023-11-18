@@ -64,6 +64,8 @@ And the current ports are:
 ```
 port[0] = Keyboard status (set if key pressed)
 port[1] = Key that is being pressed
+port[2] = cursor X
+port[3] = cursor Y
 ```
 
 # Known bugs

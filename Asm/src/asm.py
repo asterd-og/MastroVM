@@ -60,13 +60,15 @@ outRegVal  = 0x002e
 outValReg  = 0x002f
 outRegReg  = 0x0030
 
-#program = [cmpRegVal, 0x0, 0x0100, je, 0x817f + 9, addRegVal, 0x0, 0x0001, jmp, 0x817f, 0xffff]
-
 program = []
 ln = 1
 mode = 0
 labels = {}
 labelsNeedChange = {}
+dataAddrs = {}
+
+def createData(data, name):
+    dataAddrs[name] = data
 
 def isReg(str_):
     if not str_.startswith('['):
@@ -78,12 +80,10 @@ def isReg(str_):
 def parseReg(reg):
     if 'reg' in reg:
         reg = reg.replace('reg', '').lower()
-        if reg > 'c' or reg < 'a':
+        if reg > 'o' or reg < 'a':
             print(f"Invalid register '{reg}' at line {ln}.")
             exit(1)
-        if reg == 'a': return 0
-        elif reg == 'b': return 1
-        elif reg == 'c': return 2
+        return (ord(reg) - 97)
     else:
         return 3
 

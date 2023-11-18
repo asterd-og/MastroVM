@@ -13,10 +13,11 @@
 // Made by: Astrido >_<
 
 // CPU specifications:
-//  There are 3 registers:
+//  There are 16 registers:
 //      - A
 //      - B
 //      - C
+//      - ...
 //
 //  There are also the ports, which can be used to access peripherals
 //  and an address bus, which is used to address the memory when writing/reading
@@ -54,9 +55,10 @@ typedef struct {
     uint16_t SP;
     uint16_t PC;
     
-    uint16_t regA;
-    uint16_t regB;
-    uint16_t regC;
+    //uint16_t regA;
+    //uint16_t regB;
+    //uint16_t regC;
+    uint16_t registers[16];
 
     uint8_t status;
 
