@@ -52,14 +52,17 @@
 #define rdataEnd   stackEnd + 0x3e80
 
 #define romStart   rdataEnd
-#define romEnd     0xffff 
+#define romEnd     0xffff
+
+#define registersCount 15
+#define portsCount 15
 
 typedef struct {
     uint16_t memory[65536];
     uint16_t SP;
     uint16_t PC;
     
-    uint16_t registers[16];
+    uint16_t registers[registersCount + 1];
 
     uint8_t status;
 
@@ -73,7 +76,7 @@ typedef struct {
     uint16_t dataBus;
     uint16_t registerBus;
 
-    uint16_t ports[16];
+    uint16_t ports[portsCount + 1];
 } CPU;
 
 int CPU_Init(CPU* cpu, uint16_t* memory);

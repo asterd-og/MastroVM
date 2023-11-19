@@ -119,7 +119,7 @@ void CPU_ReadMem(CPU* cpu) {
 }
 
 void CPU_WriteReg(CPU* cpu) {
-    if (cpu->registerBus > 15) {
+    if (cpu->registerBus > registersCount) {
         cpu->status = UNKNOWN_REGISTER;
         return;
     }
@@ -127,7 +127,7 @@ void CPU_WriteReg(CPU* cpu) {
 }
 
 void CPU_ReadReg(CPU* cpu) {
-    if (cpu->registerBus > 15) {
+    if (cpu->registerBus > registersCount) {
         cpu->status = UNKNOWN_REGISTER;
         return;
     }
@@ -135,7 +135,7 @@ void CPU_ReadReg(CPU* cpu) {
 }
 
 void CPU_WritePort(CPU* cpu) {
-    if (cpu->addressBus > 15) {
+    if (cpu->addressBus > portsCount) {
         cpu->status = ADDR_OUT_OF_BOUNDS;
         return;
     }
@@ -144,7 +144,7 @@ void CPU_WritePort(CPU* cpu) {
 }
 
 void CPU_ReadPort(CPU* cpu) {
-    if (cpu->addressBus > 15) {
+    if (cpu->addressBus > portsCount) {
         cpu->status = ADDR_OUT_OF_BOUNDS;
         return;
     }
